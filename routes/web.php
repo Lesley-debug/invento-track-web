@@ -15,6 +15,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisterController::class, 'store'])->name('register.store'); // Handle the registration form submission
     Route::get('/login', [LoginController::class, 'show'])->name('login'); // Show the login form
     Route::post('/login', [LoginController::class, 'store'])->name('login.store'); // Handle the login form submission
+
 });
 
 // Protected tenant routes
@@ -23,4 +24,19 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+
+    // Product routes
+    Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
+
+    // Category routes
+    Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [App\Http\Controllers\CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [App\Http\Controllers\CategoryController::class, 'store'])->name('categories.store');
+
+    // Unit routes
+    Route::get('/units', [App\Http\Controllers\UnitController::class, 'index'])->name('units.index');
+    Route::get('/units/create', [App\Http\Controllers\UnitController::class, 'create'])->name('units.create');
+    Route::post('/units', [App\Http\Controllers\UnitController::class, 'store'])->name('units.store');
 });

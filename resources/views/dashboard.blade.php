@@ -24,7 +24,7 @@
 
     {{-- Actions --}}
     <div class="flex items-center gap-3">
-        <a href="#"
+        <a href="{{ route('products.create') }}"
            class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition duration-200 flex items-center gap-2 shadow-lg shadow-indigo-500/25">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
