@@ -1,7 +1,26 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
+// Public routes
 Route::get('/', function () {
     return view('welcome');
+});
+
+// Auth routes
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterController::class, 'show'])->name('register'); // Show the registration form
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store'); // Handle the registration form submission
+    Route::get('/login', [LoginController::class, 'show'])->name('login'); // Show the login form
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store'); // Handle the login form submission
+});
+
+// Protected tenant routes
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 });
