@@ -29,6 +29,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
     Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/{product}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
 
     // Category routes
     Route::get('/categories', [App\Http\Controllers\CategoryController::class, 'index'])->name('categories.index');
@@ -39,4 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/units', [App\Http\Controllers\UnitController::class, 'index'])->name('units.index');
     Route::get('/units/create', [App\Http\Controllers\UnitController::class, 'create'])->name('units.create');
     Route::post('/units', [App\Http\Controllers\UnitController::class, 'store'])->name('units.store');
+
+    // Settings routes
+    Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'show'])->name('settings');
+    Route::put('/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
 });
