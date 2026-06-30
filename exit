@@ -1,0 +1,8 @@
+[90m= [39m[34;4mApp\Models\Location[39;24m {#9619
+    [34mtenant_id[39m: [32m"[39m[32m019f09ba-6e8f-716c-83cc-470e3b234dd9[39m[32m"[39m,
+    [34mname[39m: [32m"[39m[32mMain Warehouse[39m[32m"[39m,
+    [34maddress[39m: [32m"[39m[32mBamenda, North West[39m[32m"[39m,
+    [34mid[39m: [32m"[39m[32m019f0f7c-bb37-71cd-831c-5f35e890103d[39m[32m"[39m,
+    [34mupdated_at[39m: [32m"[39m[32m2026-06-28 18:27:40[39m[32m"[39m,
+    [34mcreated_at[39m: [32m"[39m[32m2026-06-28 18:27:40[39m[32m"[39m,
+  }

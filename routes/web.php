@@ -46,4 +46,15 @@ Route::middleware('auth')->group(function () {
     // Settings routes
     Route::get('/settings', [App\Http\Controllers\SettingsController::class, 'show'])->name('settings');
     Route::put('/settings', [App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
+
+    // Stock routes
+    Route::get('/stock', [App\Http\Controllers\StockController::class, 'index'])->name('stock.index');
+    Route::get('/stock/add', [App\Http\Controllers\StockController::class, 'add'])->name('stock.add');
+    Route::post('/stock/add', [App\Http\Controllers\StockController::class, 'store'])->name('stock.store');
+    Route::get('/stock/movements', [App\Http\Controllers\StockController::class, 'movements'])->name('stock.movements');
+
+    // Location routes
+    Route::get('/locations', [App\Http\Controllers\LocationController::class, 'index'])->name('locations.index');
+    Route::get('/locations/create', [App\Http\Controllers\LocationController::class, 'create'])->name('locations.create');
+    Route::post('/locations', [App\Http\Controllers\LocationController::class, 'store'])->name('locations.store');
 });
