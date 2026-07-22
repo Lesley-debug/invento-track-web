@@ -1,58 +1,225 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Invento Track
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> A multi-tenant SaaS inventory management system built with Laravel 13, Filament v5, Livewire, and Tailwind CSS.
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-13-red?style=flat-square&logo=laravel)
+![Filament](https://img.shields.io/badge/Filament-v5-orange?style=flat-square)
+![PHP](https://img.shields.io/badge/PHP-8.3-blue?style=flat-square&logo=php)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=flat-square&logo=mysql)
+![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## What is Invento Track?
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Invento Track is a multi-tenant SaaS platform that allows businesses (supermarkets, hospitals, pharmacies, warehouses, retail shops) to manage their inventory from a single, clean dashboard.
 
-## Learning Laravel
+Each company that signs up gets their own **isolated workspace** — they can only see and manage their own products, stock, orders, and invoices. No data leaks between companies.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+The platform owner manages everything (plans, tenants, billing) from a separate **Filament super admin panel**.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Tech Stack
 
-## Agentic Development
+| Layer | Technology |
+|-------|-----------|
+| Backend | Laravel 13 |
+| Admin Panel | Filament v5.6 |
+| Frontend | Blade + Livewire + Alpine.js |
+| Styling | Tailwind CSS |
+| Database | MySQL 8 |
+| Language | PHP 8.3 |
+| Auth | Custom multi-tenant auth |
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## Architecture
 
-php artisan boost:install
+### Multi-Tenancy
+- **Single database** with `tenant_id` scoping on every table
+- UUID primary keys on all 20 tables (prevents ID enumeration attacks)
+- Every controller method has `abort(403)` security checks to prevent cross-tenant data access
+- Two separate panels: `/admin` (platform owner) and `/dashboard` (tenant companies)
+
+### Stock Tracking (Dual-Table Pattern)
+- `stock_levels` — stores the **current quantity** per product per location (fast reads)
+- `stock_movements` — stores the **full audit trail** of every stock IN, OUT, and adjustment
+- Every stock change runs inside a `DB::transaction()` to guarantee data consistency
+
+### Subscription Plans
+- Plans table drives feature gating (`max_users`, `max_products`, `max_locations`, `has_api_access`)
+- Every new company gets a **14-day free trial** automatically on registration
+- Plan limits enforced at the controller level
+
+---
+
+## Database Design (20 Tables)
+
+```
+SaaS & Billing      → plans, subscriptions
+Tenants & Users     → tenants, users
+Product Catalogue   → categories, units, products
+Inventory & Stock   → locations, stock_levels, stock_movements
+Procurement         → suppliers, purchase_orders, po_items
+Sales & Invoicing   → customers, tax_rates, sales_orders, sale_items, invoices, payments
+Alerts              → alerts
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## Features
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Super Admin Panel (`/admin`) — Filament v5
+- [x] Manage subscription plans (Starter, Growth, Enterprise)
+- [x] View and manage all tenant companies
+- [x] Manage users across tenants
+- [x] Full CRUD for all 20 models
+- [x] Role-based access — only `super_admin` role can access this panel
 
-## Code of Conduct
+### Tenant Dashboard (`/dashboard`) — Blade + Livewire
+- [x] Company registration (creates Tenant + User + 14-day trial automatically)
+- [x] Login / Logout
+- [x] Product catalogue management (create, edit, delete, search, filter by category)
+- [x] Category management
+- [x] Unit of measurement management
+- [x] Warehouse/location management
+- [x] Stock level tracking (current quantities per product per location)
+- [x] Stock movements (IN / OUT / Adjustment with full audit trail)
+- [x] Low stock alerts on the stock levels page
+- [x] Company settings (name, currency, timezone)
+- [x] Trial countdown banner
+- [ ] Suppliers & Purchase Orders *(in progress)*
+- [ ] Sales Orders & Invoicing *(in progress)*
+- [ ] Stripe billing integration *(planned)*
+- [ ] Landing page *(planned)*
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Local Setup
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Requirements
+- PHP 8.2+
+- Composer
+- MySQL 8+
+- Node.js & NPM
+
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Lesley-debug/invento-track-web.git
+cd invento-track-web
+
+# 2. Install PHP dependencies
+composer install
+
+# 3. Copy environment file
+cp .env.example .env
+
+# 4. Generate application key
+php artisan key:generate
+
+# 5. Configure your database in .env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=invento_track
+DB_USERNAME=root
+DB_PASSWORD=your_password
+
+# 6. Run migrations
+php artisan migrate
+
+# 7. Create a super admin user
+php artisan make:filament-user
+
+# 8. Set the user role to super_admin
+php artisan tinker
+\App\Models\User::where('email', 'your@email.com')->update(['role' => 'super_admin']);
+exit
+
+# 9. Start the development server
+php artisan serve
+```
+
+### Access Points
+
+| URL | Description |
+|-----|-------------|
+| `http://localhost:8000/` | Landing page (coming soon) |
+| `http://localhost:8000/register` | Company registration |
+| `http://localhost:8000/login` | Tenant login |
+| `http://localhost:8000/dashboard` | Tenant dashboard |
+| `http://localhost:8000/admin` | Super admin panel (Filament) |
+
+---
+
+## Project Structure
+
+```
+app/
+├── Filament/Resources/     # Filament admin resources (20 models)
+├── Http/Controllers/
+│   ├── Auth/               # RegisterController, LoginController
+│   ├── CategoryController.php
+│   ├── LocationController.php
+│   ├── ProductController.php
+│   ├── SettingsController.php
+│   ├── StockController.php
+│   └── UnitController.php
+├── Models/                 # 20 Eloquent models with UUID + relationships
+database/
+├── migrations/             # 20 migrations in dependency order
+resources/views/
+├── auth/                   # login.blade.php, register.blade.php
+├── layouts/app.blade.php   # Main tenant dashboard layout with sidebar
+├── dashboard.blade.php     # Tenant home page
+├── products/               # index, create, edit
+├── categories/             # index, create
+├── units/                  # index, create
+├── locations/              # index, create
+├── stock/                  # index, add, movements
+└── settings.blade.php      # Company settings page
+```
+
+---
+
+## Security
+
+- All tenant routes protected by `auth` middleware
+- Super admin panel protected by `FilamentUser` interface + `canAccessPanel()` method
+- Every controller checks `tenant_id` ownership before read/write operations
+- UUID primary keys prevent sequential ID enumeration
+- Passwords hashed using Laravel's `bcrypt` via `Hash::make()`
+- CSRF protection on all forms
+- SQL injection prevented via Eloquent parameterized queries
+
+---
+
+## Roadmap
+
+- [ ] Suppliers & Purchase Orders
+- [ ] Sales Orders & Invoicing
+- [ ] PDF invoice generation
+- [ ] Low stock email alerts
+- [ ] Stripe subscription billing
+- [ ] CSV product import/export
+- [ ] API access for Enterprise plan tenants
+- [ ] Mobile-responsive dashboard improvements
+- [ ] Landing page
+
+---
+
+## Author
+
+**Lesley Tabi**
+- GitHub: [@Lesley-debug](https://github.com/Lesley-debug)
+- Email: esanglesley@gmail.com
+- Based in Bamenda, Cameroon
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
