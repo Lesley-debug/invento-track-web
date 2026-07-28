@@ -20,9 +20,7 @@ Route::middleware('guest')->group(function () {
 
 // Protected tenant routes
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
     // Product routes
@@ -72,4 +70,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/purchase-orders', [App\Http\Controllers\PurchaseOrderController::class, 'store'])->name('purchase-orders.store');
     Route::get('/purchase-orders/{purchaseOrder}', [App\Http\Controllers\PurchaseOrderController::class, 'show'])->name('purchase-orders.show');
     Route::put('/purchase-orders/{purchaseOrder}/receive', [App\Http\Controllers\PurchaseOrderController::class, 'receive'])->name('purchase-orders.receive');
+
+    // Customer routes
+    Route::get('/customers', [App\Http\Controllers\CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/customers/create', [App\Http\Controllers\CustomerController::class, 'create'])->name('customers.create');
+    Route::post('/customers', [App\Http\Controllers\CustomerController::class, 'store'])->name('customers.store');
+
+    // Sales Order routes
+    Route::get('/sales-orders', [App\Http\Controllers\SalesOrderController::class, 'index'])->name('sales-orders.index');
+    Route::get('/sales-orders/create', [App\Http\Controllers\SalesOrderController::class, 'create'])->name('sales-orders.create');
+    Route::post('/sales-orders', [App\Http\Controllers\SalesOrderController::class, 'store'])->name('sales-orders.store');
+    Route::get('/sales-orders/{salesOrder}', [App\Http\Controllers\SalesOrderController::class, 'show'])->name('sales-orders.show');
+    Route::put('/sales-orders/{salesOrder}/confirm', [App\Http\Controllers\SalesOrderController::class, 'confirm'])->name('sales-orders.confirm');
+
+    // Invoice routes
+    Route::get('/invoices', [App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('/invoices/{invoice}', [App\Http\Controllers\InvoiceController::class, 'show'])->name('invoices.show');
+    Route::post('/invoices/{invoice}/pay', [App\Http\Controllers\InvoiceController::class, 'pay'])->name('invoices.pay');
     });
