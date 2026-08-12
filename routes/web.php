@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Route;
 
 // Public routes
 Route::get('/', function () {
-    return view('welcome');
+    $plans = \App\Models\Plan::where('is_active', true)
+        ->orderBy('price_monthly')
+        ->get();
+    return view('welcome', compact('plans'));
 });
 
 // Auth routes
