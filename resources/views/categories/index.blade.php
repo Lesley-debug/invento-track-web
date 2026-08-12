@@ -32,6 +32,7 @@
             <tr>
                 <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
                 <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</th>
+                <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -39,6 +40,15 @@
             <tr class="hover:bg-gray-50">
                 <td class="px-6 py-4 font-medium text-gray-800">{{ $category->name }}</td>
                 <td class="px-6 py-4 text-gray-500">{{ $category->description ?? '—' }}</td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('categories.edit', $category) }}" class="text-indigo-600 text-xs font-medium bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg">Edit</a>
+                        <form action="{{ route('categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Delete this category?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="text-red-600 text-xs font-medium bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg">Delete</button>
+                        </form>
+                    </div>
+                </td>
             </tr>
             @endforeach
         </tbody>

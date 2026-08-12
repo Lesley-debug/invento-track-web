@@ -35,4 +35,28 @@ class UnitController extends Controller
         return redirect()->route('units.index')
             ->with('success', 'Unit created successfully!');
     }
+
+    public function edit(Unit $unit)
+    {
+        if ($unit->tenant_id !== Auth::user()->tenant_id) abort(403);
+        return view('units.edit', compact('unit'));
+    }
+
+    public function update(Request $request, Unit $unit)
+    {
+        if ($unit->tenant_id !== Auth::user()->tenant_id) abort(403);
+        $request->validate([
+            'name'         => ['required', 'string', 'max:255'],
+            'abbreviation' => ['required', 'string', 'max:50'],
+        ]);
+        $unit->update($request->only('name', 'abbreviation'));
+        return redirect()->route('units.index')->with('success', 'Unit updated successfully!');
+    }
+
+    public function destroy(Unit $unit)
+    {
+        if ($unit->tenant_id !== Auth::user()->tenant_id) abort(403);
+        $unit->delete();
+        return redirect()->route('units.index')->with('success', 'Unit deleted successfully!');
+    }
 }

@@ -39,4 +39,30 @@ class CustomerController extends Controller
         return redirect()->route('customers.index')
             ->with('success', 'Customer created successfully!');
     }
+
+    public function edit(Customer $customer)
+    {
+        if ($customer->tenant_id !== Auth::user()->tenant_id) abort(403);
+        return view('customers.edit', compact('customer'));
+    }
+
+    public function update(Request $request, Customer $customer)
+    {
+        if ($customer->tenant_id !== Auth::user()->tenant_id) abort(403);
+        $request->validate([
+            'name'    => ['required', 'string', 'max:255'],
+            'email'   => ['nullable', 'email'],
+            'phone'   => ['nullable', 'string', 'max:50'],
+            'address' => ['nullable', 'string'],
+        ]);
+        $customer->update($request->only('name', 'email', 'phone', 'address'));
+        return redirect()->route('customers.index')->with('success', 'Customer updated successfully!');
+    }
+
+    public function destroy(Customer $customer)
+    {
+        if ($customer->tenant_id !== Auth::user()->tenant_id) abort(403);
+        $customer->delete();
+        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully!');
+    }
 }

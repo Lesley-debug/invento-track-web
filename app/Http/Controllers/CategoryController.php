@@ -35,4 +35,28 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')
             ->with('success', 'Category created successfully!');
     }
+
+    public function edit(Category $category)
+    {
+        if ($category->tenant_id !== Auth::user()->tenant_id) abort(403);
+        return view('categories.edit', compact('category'));
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        if ($category->tenant_id !== Auth::user()->tenant_id) abort(403);
+        $request->validate([
+            'name'        => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+        ]);
+        $category->update($request->only('name', 'description'));
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully!');
+    }
+
+    public function destroy(Category $category)
+    {
+        if ($category->tenant_id !== Auth::user()->tenant_id) abort(403);
+        $category->delete();
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');
+    }
 }

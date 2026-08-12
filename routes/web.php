@@ -91,3 +91,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoices/{invoice}', [App\Http\Controllers\InvoiceController::class, 'show'])->name('invoices.show');
     Route::post('/invoices/{invoice}/pay', [App\Http\Controllers\InvoiceController::class, 'pay'])->name('invoices.pay');
     });
+
+// Category edit/delete
+Route::get('/categories/{category}/edit', [App\Http\Controllers\CategoryController::class, 'edit'])->name('categories.edit');
+Route::put('/categories/{category}', [App\Http\Controllers\CategoryController::class, 'update'])->name('categories.update');
+Route::delete('/categories/{category}', [App\Http\Controllers\CategoryController::class, 'destroy'])->name('categories.destroy');
+
+// Unit edit/delete
+Route::get('/units/{unit}/edit', [App\Http\Controllers\UnitController::class, 'edit'])->name('units.edit');
+Route::put('/units/{unit}', [App\Http\Controllers\UnitController::class, 'update'])->name('units.update');
+Route::delete('/units/{unit}', [App\Http\Controllers\UnitController::class, 'destroy'])->name('units.destroy');
+
+// Customer edit/delete
+Route::get('/customers/{customer}/edit', [App\Http\Controllers\CustomerController::class, 'edit'])->name('customers.edit');
+Route::put('/customers/{customer}', [App\Http\Controllers\CustomerController::class, 'update'])->name('customers.update');
+Route::delete('/customers/{customer}', [App\Http\Controllers\CustomerController::class, 'destroy'])->name('customers.destroy');
+
+// Location edit/delete
+Route::get('/locations/{location}/edit', [App\Http\Controllers\LocationController::class, 'edit'])->name('locations.edit');
+Route::put('/locations/{location}', [App\Http\Controllers\LocationController::class, 'update'])->name('locations.update');
+Route::delete('/locations/{location}', [App\Http\Controllers\LocationController::class, 'destroy'])->name('locations.destroy');

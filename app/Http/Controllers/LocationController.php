@@ -35,4 +35,28 @@ class LocationController extends Controller
         return redirect()->route('locations.index')
             ->with('success', 'Location created successfully!');
     }
+
+    public function edit(Location $location)
+    {
+        if ($location->tenant_id !== Auth::user()->tenant_id) abort(403);
+        return view('locations.edit', compact('location'));
+    }
+
+    public function update(Request $request, Location $location)
+    {
+        if ($location->tenant_id !== Auth::user()->tenant_id) abort(403);
+        $request->validate([
+            'name'    => ['required', 'string', 'max:255'],
+            'address' => ['nullable', 'string'],
+        ]);
+        $location->update($request->only('name', 'address'));
+        return redirect()->route('locations.index')->with('success', 'Location updated successfully!');
+    }
+
+    public function destroy(Location $location)
+    {
+        if ($location->tenant_id !== Auth::user()->tenant_id) abort(403);
+        $location->delete();
+        return redirect()->route('locations.index')->with('success', 'Location deleted successfully!');
+    }
 }
