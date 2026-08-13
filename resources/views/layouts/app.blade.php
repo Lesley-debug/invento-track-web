@@ -23,15 +23,88 @@
         .active-link {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
         }
+
+        /* Mobile sidebar overlay */
+        #sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            backdrop-filter: blur(2px);
+        }
+
+        #sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Sidebar mobile */
+        #sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #sidebar.open {
+            transform: translateX(0);
+        }
+
+        /* Desktop sidebar always visible */
+        @media (min-width: 1024px) {
+            #sidebar {
+                transform: translateX(0) !important;
+                position: relative !important;
+            }
+
+            #sidebar-overlay {
+                display: none !important;
+            }
+
+            #mobile-header {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
-<body class="bg-slate-50 text-gray-800">
+<body class="bg-slate-50 text-gray-800 overflow-x-hidden">
+
+    {{-- ===== MOBILE HEADER ===== --}}
+    <header id="mobile-header" class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between shadow-sm">
+        {{-- Hamburger --}}
+        <button id="sidebar-toggle" class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition">
+            <svg id="hamburger-open" class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg id="hamburger-close" class="w-5 h-5 text-gray-700 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        {{-- Logo center --}}
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+            </div>
+            <span class="font-bold text-gray-900">Invento Track</span>
+        </div>
+
+        {{-- User avatar --}}
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
+            <span class="text-white text-xs font-bold">
+                {{ strtoupper(substr(auth()->user()->tenant->name ?? auth()->user()->name, 0, 1)) }}
+            </span>
+        </div>
+    </header>
+
+    {{-- ===== MOBILE OVERLAY ===== --}}
+    <div id="sidebar-overlay"></div>
 
     <div class="flex h-screen overflow-hidden">
 
-        {{-- ===================== SIDEBAR ===================== --}}
-        <aside class="w-64 bg-gray-900 flex flex-col shadow-2xl flex-shrink-0">
+        {{-- ===== SIDEBAR ===== --}}
+        <aside id="sidebar" class="fixed lg:relative w-72 lg:w-64 h-full bg-gray-900 flex flex-col shadow-2xl z-50 flex-shrink-0">
 
             {{-- Brand --}}
             <div class="px-6 py-6 border-b border-gray-700/50">
@@ -51,7 +124,7 @@
             {{-- Company Info --}}
             <div class="px-6 py-4 border-b border-gray-700/50">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center flex-shrink-0">
                         <span class="text-indigo-400 font-bold text-sm">
                             {{ strtoupper(substr(auth()->user()->tenant->name ?? 'C', 0, 1)) }}
                         </span>
@@ -71,122 +144,109 @@
             {{-- Navigation --}}
             <nav class="flex-1 px-4 py-5 space-y-1 overflow-y-auto">
 
-                {{-- Main --}}
                 <p class="text-gray-500 text-xs font-semibold uppercase tracking-widest px-3 mb-3">Main</p>
 
                 <a href="{{ route('dashboard') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium
                {{ request()->routeIs('dashboard') ? 'active-link text-white shadow-lg shadow-indigo-500/25' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
-                    <svg class="w-4.5 h-4.5 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                     Dashboard
                 </a>
 
-                {{-- Catalogue --}}
                 <p class="text-gray-500 text-xs font-semibold uppercase tracking-widest px-3 mt-5 mb-3">Catalogue</p>
 
                 <a href="{{ route('products.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('products.*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
                     Products
                 </a>
 
                 <a href="{{ route('categories.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('categories.*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                     </svg>
                     Categories
                 </a>
 
                 <a href="{{ route('units.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('units.*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
                     </svg>
                     Units
                 </a>
 
-                {{-- Inventory --}}
                 <p class="text-gray-500 text-xs font-semibold uppercase tracking-widest px-3 mt-5 mb-3">Inventory</p>
 
                 <a href="{{ route('stock.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('stock.index') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
                     Stock Levels
                 </a>
 
                 <a href="{{ route('stock.movements') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('stock.movements') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                     </svg>
                     Stock Movements
                 </a>
 
                 <a href="{{ route('locations.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('locations.*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     Locations
                 </a>
 
-                {{-- Procurement --}}
                 <p class="text-gray-500 text-xs font-semibold uppercase tracking-widest px-3 mt-5 mb-3">Procurement</p>
 
                 <a href="{{ route('suppliers.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('suppliers.*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     Suppliers
                 </a>
 
                 <a href="{{ route('purchase-orders.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('purchase-orders.*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                     Purchase Orders
                 </a>
 
-                {{-- Sales --}}
                 <p class="text-gray-500 text-xs font-semibold uppercase tracking-widest px-3 mt-5 mb-3">Sales</p>
 
                 <a href="{{ route('sales-orders.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('sales-orders.*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
                     Sales Orders
                 </a>
 
                 <a href="{{ route('invoices.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('invoices.*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                     Invoices
                 </a>
 
-                <a href="#"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    Payments
-                </a>
-
                 <a href="{{ route('customers.index') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('customers.*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     Customers
@@ -197,8 +257,8 @@
             {{-- Bottom: Settings + Logout --}}
             <div class="px-4 py-4 border-t border-gray-700/50 space-y-1">
                 <a href="{{ route('settings') }}"
-                    class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    class="sidebar-link nav-item flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('settings*') ? 'active-link text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
@@ -209,27 +269,26 @@
                     @csrf
                     <button type="submit"
                         class="sidebar-link w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-red-400 hover:bg-red-500/10">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
                         Sign Out
                     </button>
                 </form>
             </div>
-
         </aside>
 
-        {{-- ===================== MAIN CONTENT ===================== --}}
-        <div class="flex-1 flex flex-col overflow-hidden">
+        {{-- ===== MAIN CONTENT ===== --}}
+        <div class="flex-1 flex flex-col overflow-hidden min-w-0">
 
-            {{-- Top navbar --}}
-            <header class="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between flex-shrink-0">
+            {{-- Top navbar (desktop only) --}}
+            <header class="hidden lg:flex bg-white border-b border-gray-200 px-8 py-4 items-center justify-between flex-shrink-0">
                 <div>
                     <h2 class="text-lg font-semibold text-gray-800">@yield('page-title', 'Dashboard')</h2>
                     <p class="text-xs text-gray-400">@yield('page-subtitle', 'Welcome back')</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    {{-- Trial Badge --}}
+                    {{-- Trial badge --}}
                     @php
                     $tenant = auth()->user()->tenant;
                     $trialEndsAt = $tenant->trial_ends_at ? \Carbon\Carbon::parse($tenant->trial_ends_at) : null;
@@ -245,21 +304,13 @@
                         Trial: {{ $daysLeft }} {{ Str::plural('day', $daysLeft) }} left
                     </div>
                     @else
-                    <div class="bg-red-50 border border-red-200 text-red-700 text-xs font-medium px-3 py-1.5 rounded-full">
-                        Trial expired
-                    </div>
+                    <div class="bg-red-50 border border-red-200 text-red-700 text-xs font-medium px-3 py-1.5 rounded-full">Trial expired</div>
                     @endif
-                    @elseif($tenant->subscription_status === 'expired')
-                    <div class="bg-red-50 border border-red-200 text-red-700 text-xs font-medium px-3 py-1.5 rounded-full">
-                        Trial expired
-                    </div>
                     @elseif($tenant->subscription_status === 'active')
-                    <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium px-3 py-1.5 rounded-full">
-                        ✓ Active
-                    </div>
+                    <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium px-3 py-1.5 rounded-full">✓ Active</div>
                     @endif
 
-                    {{-- User Avatar --}}
+                    {{-- User avatar --}}
                     <div class="flex items-center gap-2.5">
                         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center">
                             <span class="text-white text-xs font-bold">
@@ -274,46 +325,87 @@
                 </div>
             </header>
 
+            {{-- Mobile page title bar --}}
+            <div class="lg:hidden bg-white border-b border-gray-100 px-4 py-3 mt-16 flex-shrink-0">
+                <h2 class="text-base font-semibold text-gray-800">@yield('page-title', 'Dashboard')</h2>
+            </div>
+
             {{-- Page content --}}
-            <main class="flex-1 overflow-y-auto px-8 py-8">
+            <main class="flex-1 overflow-y-auto px-4 lg:px-8 py-4 lg:py-8">
+
                 {{-- Trial expired banner --}}
                 @if(auth()->user()->tenant->subscription_status === 'expired' || session('trial_expired'))
-                <div class="bg-red-600 text-white px-6 py-4 rounded-xl mb-6 flex items-center justify-between">
+                <div class="bg-red-600 text-white px-4 lg:px-6 py-4 rounded-xl mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div class="flex items-center gap-3">
                         <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
                         <div>
                             <p class="font-semibold text-sm">Your trial has expired</p>
-                            <p class="text-red-200 text-xs mt-0.5">Upgrade your plan to continue using Invento Track and keep your data.</p>
+                            <p class="text-red-200 text-xs mt-0.5">Upgrade to continue using Invento Track.</p>
                         </div>
                     </div>
-                    <a href="{{ route('settings') }}"
-                        class="bg-white text-red-600 font-semibold text-xs px-4 py-2 rounded-lg hover:bg-red-50 transition whitespace-nowrap">
+                    <a href="{{ route('settings') }}" class="bg-white text-red-600 font-semibold text-xs px-4 py-2 rounded-lg hover:bg-red-50 transition whitespace-nowrap">
                         Upgrade Plan →
                     </a>
                 </div>
                 @endif
 
-                {{-- Trial expiring soon warning (last 3 days) --}}
-                @if(auth()->user()->tenant->subscription_status === 'trial' && auth()->user()->tenant->trial_ends_at)
-                @php $daysLeft = now()->diffInDays(auth()->user()->tenant->trial_ends_at, false); @endphp
-                @if($daysLeft <= 3 && $daysLeft>= 0)
-                    <div class="bg-amber-50 border border-amber-200 text-amber-800 px-6 py-3 rounded-xl mb-6 flex items-center justify-between">
-                        <p class="text-sm font-medium">
-                            ⚠️ Your trial expires in {{ $daysLeft }} {{ Str::plural('day', $daysLeft) }}. Upgrade to keep access.
-                        </p>
-                        <a href="{{ route('settings') }}" class="text-amber-800 font-semibold text-xs underline">Upgrade now</a>
+                {{-- Trial expiring soon --}}
+                @if(isset($daysLeft) && auth()->user()->tenant->subscription_status === 'trial' && $daysLeft <= 3 && $daysLeft>= 0)
+                    <div class="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-xl mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                        <p class="text-sm font-medium">⚠️ Trial expires in {{ $daysLeft }} {{ Str::plural('day', $daysLeft) }}.</p>
+                        <a href="{{ route('settings') }}" class="text-amber-800 font-semibold text-xs underline whitespace-nowrap">Upgrade now</a>
                     </div>
-                    @endif
                     @endif
 
                     @yield('content')
             </main>
-
         </div>
-
     </div>
+
+    {{-- ===== MOBILE SIDEBAR SCRIPT ===== --}}
+    <script>
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const hamburgerOpen = document.getElementById('hamburger-open');
+        const hamburgerClose = document.getElementById('hamburger-close');
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+            hamburgerOpen.classList.add('hidden');
+            hamburgerClose.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            hamburgerOpen.classList.remove('hidden');
+            hamburgerClose.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+        });
+
+        overlay.addEventListener('click', closeSidebar);
+
+        // Close sidebar when nav item clicked on mobile
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth < 1024) closeSidebar();
+            });
+        });
+
+        // Close on resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) closeSidebar();
+        });
+    </script>
 
 </body>
 
