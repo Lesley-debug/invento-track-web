@@ -111,3 +111,7 @@ Route::delete('/customers/{customer}', [App\Http\Controllers\CustomerController:
 Route::get('/locations/{location}/edit', [App\Http\Controllers\LocationController::class, 'edit'])->name('locations.edit');
 Route::put('/locations/{location}', [App\Http\Controllers\LocationController::class, 'update'])->name('locations.update');
 Route::delete('/locations/{location}', [App\Http\Controllers\LocationController::class, 'destroy'])->name('locations.destroy');
+
+// Security settings
+Route::get('/settings/security', [App\Http\Controllers\SettingsController::class, 'security'])->name('settings.security');
+Route::put('/settings/security', [App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.password');

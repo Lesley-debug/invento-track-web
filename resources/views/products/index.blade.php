@@ -44,7 +44,7 @@
             </select>
         </form>
 
-        <p class="text-gray-400 text-sm">{{ $products->count() }} products</p>
+        <p class="text-gray-400 text-sm">{{ $products->total() }} products</p>
     </div>
 
     <a href="{{ route('products.create') }}"
@@ -138,6 +138,11 @@
             @endforeach
         </tbody>
     </table>
+    @if($products->hasPages())
+    <div class="px-6 py-4 border-t border-gray-100">
+        {{ $products->withQueryString()->links() }}
+    </div>
+    @endif
 </div>
 @endif
 

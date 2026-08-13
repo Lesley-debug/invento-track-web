@@ -105,7 +105,7 @@ class StockController extends Controller
                 $q->where('tenant_id', $tenant_id);
             })
             ->latest()
-            ->get();
+            ->paginate(20);
 
         return view('stock.movements', compact('movements'));
     }

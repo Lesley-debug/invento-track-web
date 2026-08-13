@@ -25,7 +25,7 @@ class ProductController extends Controller
             ->when($request->category, function ($query, $category) {
                 $query->where('category_id', $category);
             })
-            ->get();
+            ->paginate(15);
 
         return view('products.index', compact('products', 'categories'));
     }

@@ -32,4 +32,23 @@ class SettingsController extends Controller
         return redirect()->route('settings')
             ->with('success', 'Settings updated successfully!');
     }
+
+    public function security()
+    {
+        return view('settings-security');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password'         => ['required', 'min:8', 'confirmed'],
+        ]);
+
+        Auth::user()->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+        ]);
+
+        return back()->with('success', 'Password updated successfully!');
+    }
 }

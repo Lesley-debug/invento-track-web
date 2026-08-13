@@ -27,6 +27,18 @@
     </div>
     @endif
 
+    {{-- Tabs --}}
+    <div class="flex gap-2 border-b border-gray-200 mb-6">
+        <a href="{{ route('settings') }}"
+            class="px-4 py-2.5 text-sm font-medium text-indigo-600 border-b-2 border-indigo-600">
+            Company
+        </a>
+        <a href="{{ route('settings.security') }}"
+            class="px-4 py-2.5 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300 transition">
+            Security
+        </a>
+    </div>
+
     <form action="{{ route('settings.update') }}" method="POST" class="space-y-6">
         @csrf
         @method('PUT')

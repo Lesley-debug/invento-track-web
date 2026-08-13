@@ -230,12 +230,32 @@
                 </div>
                 <div class="flex items-center gap-4">
                     {{-- Trial Badge --}}
-                    @if(auth()->user()->tenant->subscription_status === 'trial')
+                    @php
+                    $tenant = auth()->user()->tenant;
+                    $trialEndsAt = $tenant->trial_ends_at ? \Carbon\Carbon::parse($tenant->trial_ends_at) : null;
+                    $daysLeft = $trialEndsAt ? now()->diffInDays($trialEndsAt, false) : 0;
+                    @endphp
+
+                    @if($tenant->subscription_status === 'trial' && $trialEndsAt)
+                    @if($daysLeft > 0)
                     <div class="bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        Trial: {{ \Carbon\Carbon::parse(auth()->user()->tenant->trial_ends_at)->diffForHumans() }}
+                        Trial: {{ $daysLeft }} {{ Str::plural('day', $daysLeft) }} left
+                    </div>
+                    @else
+                    <div class="bg-red-50 border border-red-200 text-red-700 text-xs font-medium px-3 py-1.5 rounded-full">
+                        Trial expired
+                    </div>
+                    @endif
+                    @elseif($tenant->subscription_status === 'expired')
+                    <div class="bg-red-50 border border-red-200 text-red-700 text-xs font-medium px-3 py-1.5 rounded-full">
+                        Trial expired
+                    </div>
+                    @elseif($tenant->subscription_status === 'active')
+                    <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-medium px-3 py-1.5 rounded-full">
+                        ✓ Active
                     </div>
                     @endif
 
@@ -256,7 +276,39 @@
 
             {{-- Page content --}}
             <main class="flex-1 overflow-y-auto px-8 py-8">
-                @yield('content')
+                {{-- Trial expired banner --}}
+                @if(auth()->user()->tenant->subscription_status === 'expired' || session('trial_expired'))
+                <div class="bg-red-600 text-white px-6 py-4 rounded-xl mb-6 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <div>
+                            <p class="font-semibold text-sm">Your trial has expired</p>
+                            <p class="text-red-200 text-xs mt-0.5">Upgrade your plan to continue using Invento Track and keep your data.</p>
+                        </div>
+                    </div>
+                    <a href="{{ route('settings') }}"
+                        class="bg-white text-red-600 font-semibold text-xs px-4 py-2 rounded-lg hover:bg-red-50 transition whitespace-nowrap">
+                        Upgrade Plan →
+                    </a>
+                </div>
+                @endif
+
+                {{-- Trial expiring soon warning (last 3 days) --}}
+                @if(auth()->user()->tenant->subscription_status === 'trial' && auth()->user()->tenant->trial_ends_at)
+                @php $daysLeft = now()->diffInDays(auth()->user()->tenant->trial_ends_at, false); @endphp
+                @if($daysLeft <= 3 && $daysLeft>= 0)
+                    <div class="bg-amber-50 border border-amber-200 text-amber-800 px-6 py-3 rounded-xl mb-6 flex items-center justify-between">
+                        <p class="text-sm font-medium">
+                            ⚠️ Your trial expires in {{ $daysLeft }} {{ Str::plural('day', $daysLeft) }}. Upgrade to keep access.
+                        </p>
+                        <a href="{{ route('settings') }}" class="text-amber-800 font-semibold text-xs underline">Upgrade now</a>
+                    </div>
+                    @endif
+                    @endif
+
+                    @yield('content')
             </main>
 
         </div>
