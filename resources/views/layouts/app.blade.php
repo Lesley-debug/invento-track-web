@@ -63,6 +63,18 @@
                 display: none !important;
             }
         }
+
+        /* Mobile table scroll */
+        @media (max-width: 1024px) {
+            table {
+                min-width: 600px;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
     </style>
 </head>
 
