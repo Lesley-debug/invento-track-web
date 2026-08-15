@@ -878,8 +878,8 @@
             <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                 <p class="text-sm text-gray-600">© {{ date('Y') }} Invento Track. All rights reserved.</p>
                 <div class="flex items-center gap-6">
-                    <a href="#" class="text-sm text-gray-600 hover:text-white transition">Privacy Policy</a>
-                    <a href="#" class="text-sm text-gray-600 hover:text-white transition">Terms of Service</a>
+                    <a href="{{ route('privacy') }}" class="text-sm text-gray-600 hover:text-white transition">Privacy Policy</a>
+                    <a href="{{ route('terms') }}" class="text-sm text-gray-600 hover:text-white transition">Terms of Service</a>
                     <a href="mailto:esanglesley@gmail.com" class="text-sm text-gray-600 hover:text-white transition">Contact</a>
                 </div>
             </div>
