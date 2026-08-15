@@ -13,11 +13,9 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Animated gradient mesh */
-        .hero-gradient {
-            background: linear-gradient(135deg, #f8f7ff 0%, #eef2ff 30%, #f0f9ff 60%, #faf5ff 100%);
-            position: relative;
-            overflow: hidden;
+        /* Video hero fallback if video fails to load */
+        .hero-video-fallback {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f0a28 100%);
         }
 
         .mesh-blob {
@@ -197,15 +195,9 @@
             backdrop-filter: blur(20px);
         }
 
-        /* Hero background image */
-        .hero-gradient {
-            background: linear-gradient(135deg, rgba(238, 242, 255, 0.95) 0%, rgba(245, 243, 255, 0.95) 50%, rgba(240, 249, 255, 0.95) 100%),
-                url('https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=1920&q=80&auto=format') center/cover no-repeat;
-        }
-
         /* Mobile hero padding fix */
         @media (max-width: 768px) {
-            .hero-gradient {
+            .hero-video-fallback {
                 padding-top: 100px !important;
             }
 
@@ -308,64 +300,61 @@
     </nav>
 
     {{-- ===== HERO ===== --}}
-    <section class="hero-gradient min-h-screen flex items-center pt-20 pb-16 px-6 relative">
-        {{-- Animated blobs --}}
-        <div class="mesh-blob mesh-blob-1"></div>
-        <div class="mesh-blob mesh-blob-2"></div>
-        <div class="mesh-blob mesh-blob-3"></div>
+    <section class="hero-video-fallback min-h-screen flex items-center pt-24 pb-16 px-6 relative overflow-hidden">
+        {{-- Ambient background blobs --}}
+        <div class="mesh-blob mesh-blob-1 z-0" style="opacity:0.16;"></div>
+        <div class="mesh-blob mesh-blob-2 z-0" style="opacity:0.12;"></div>
 
         <div class="max-w-7xl mx-auto w-full relative z-10">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <div class="grid lg:grid-cols-2 gap-10 xl:gap-14 items-center">
 
-                {{-- Left: Copy --}}
-                <div>
-                    {{-- Badge --}}
-                    <div class="inline-flex items-center gap-2 bg-white border border-indigo-100 text-indigo-700 text-xs font-semibold px-4 py-2 rounded-full mb-8 shadow-sm">
-                        <span class="flex h-2 w-2">
-                            <span class="animate-ping absolute h-2 w-2 rounded-full bg-indigo-400 opacity-75"></span>
-                            <span class="relative h-2 w-2 rounded-full bg-indigo-500"></span>
-                        </span>
-                        Now in public beta — 14-day free trial
+                {{-- Left: Video with copy --}}
+                <div class="relative min-h-[560px] lg:min-h-[620px] overflow-hidden rounded-3xl border border-white/15 shadow-2xl shadow-black/30">
+                    <video
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        class="absolute inset-0 w-full h-full object-cover z-0"
+                        style="filter: brightness(0.68) saturate(1.05) contrast(1.08);">
+                        <source src="{{ asset('videos/herobg.mp4') }}" type="video/mp4">
+                    </video>
+
+                    <div class="absolute inset-0 z-10"
+                        style="background:
+                            linear-gradient(180deg, rgba(7,5,20,0.10) 0%, rgba(7,5,20,0.28) 42%, rgba(7,5,20,0.82) 100%),
+                            linear-gradient(135deg, rgba(79,70,229,0.32) 0%, rgba(109,40,217,0.16) 45%, rgba(15,10,40,0.38) 100%);">
                     </div>
 
-                    <h1 class="text-5xl lg:text-6xl font-black text-gray-900 leading-[1.1] tracking-tight mb-6">
-                        Inventory that
-                        <span class="gradient-text block">works as hard</span>
-                        as you do
-                    </h1>
+                    <div class="absolute inset-x-0 bottom-0 z-20 p-7 sm:p-10 lg:p-12">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight mb-8">
+                            Inventory that
+                            <span class="block" style="background: linear-gradient(135deg, #c7d2fe, #ddd6fe, #f0abfc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                                works as hard
+                            </span>
+                            as you do
+                        </h1>
 
-                    <p class="text-lg text-gray-500 leading-relaxed mb-8 max-w-lg">
-                        Track stock, manage purchase orders, issue invoices, and get low-stock alerts — all from one beautiful dashboard. Built for businesses across Africa.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 mb-10">
-                        <a href="{{ route('register') }}"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-4 rounded-2xl text-base transition shadow-xl shadow-indigo-500/30 flex items-center justify-center gap-2 group">
-                            Start for free
-                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </a>
                         <a href="#features"
-                            class="bg-white hover:bg-gray-50 text-gray-700 font-semibold px-8 py-4 rounded-2xl text-base border border-gray-200 transition flex items-center justify-center gap-2 shadow-sm">
-                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="inline-flex items-center justify-center gap-2 bg-white/15 hover:bg-white/25 border border-white/35 text-white font-semibold px-6 py-3.5 rounded-2xl text-base transition backdrop-blur">
+                            <svg class="w-5 h-5 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             See how it works
                         </a>
-                    </div>
 
-                    {{-- Trust signals --}}
-                    <div class="flex items-center gap-6 flex-wrap">
-                        @foreach(['No credit card', '14-day trial', 'Cancel anytime', 'XAF supported'] as $trust)
-                        <div class="flex items-center gap-2 text-gray-500 text-sm">
-                            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
-                            </svg>
-                            {{ $trust }}
+                        {{-- Trust signals --}}
+                        <div class="flex items-center gap-4 sm:gap-5 flex-wrap mt-8">
+                            @foreach(['No credit card', '14-day trial', 'Cancel anytime', 'XAF supported'] as $trust)
+                            <div class="flex items-center gap-2 text-white/75 text-sm">
+                                <svg class="w-4 h-4 text-emerald-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                                </svg>
+                                {{ $trust }}
+                            </div>
+                            @endforeach
                         </div>
-                        @endforeach
                     </div>
                 </div>
 
