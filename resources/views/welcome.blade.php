@@ -165,6 +165,7 @@
         }
 
         @keyframes float {
+
             0%,
             100% {
                 transform: translateY(0) scale(1);
@@ -220,6 +221,7 @@
         }
 
         @keyframes dashFloat {
+
             0%,
             100% {
                 transform: translateY(0) rotate(-1deg);
@@ -279,6 +281,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
+
             .mesh-blob,
             .dashboard-float,
             .ticker-track,
@@ -1018,6 +1021,38 @@
                     <a href="mailto:esanglesley@gmail.com" class="text-sm text-gray-600 hover:text-white transition">Contact</a>
                 </div>
             </div>
+        </div>
+
+        <div>
+            <h4 class="text-white font-semibold mb-4 text-sm">Industries</h4>
+            <ul class="space-y-3">
+                @foreach([
+                'Pharmacies' => '/for/pharmacies',
+                'Supermarkets' => '/for/supermarkets',
+                'Hospitals' => '/for/hospitals',
+                'Restaurants' => '/for/restaurants',
+                'Warehouses' => '/for/warehouses',
+                ] as $label => $href)
+                <li><a href="{{ url($href) }}" class="text-sm hover:text-white transition">{{ $label }}</a></li>
+                @endforeach
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="text-white font-semibold mb-4 text-sm">Countries</h4>
+            <ul class="space-y-3">
+                @foreach([
+                'Nigeria' => '/for/nigeria',
+                'Ghana' => '/for/ghana',
+                'Kenya' => '/for/kenya',
+                'Cameroon' => '/for/cameroon',
+                'United Kingdom' => '/for/uk',
+                'USA' => '/for/usa',
+                'India' => '/for/india',
+                ] as $label => $href)
+                <li><a href="{{ url($href) }}" class="text-sm hover:text-white transition">{{ $label }}</a></li>
+                @endforeach
+            </ul>
         </div>
     </footer>
 
