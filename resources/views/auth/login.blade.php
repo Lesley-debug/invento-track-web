@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login — Invento Track</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>* { font-family: 'Inter', sans-serif; }</style>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4 py-8">
 
-    <div class="bg-white rounded-2xl shadow-lg w-full max-w-md p-8">
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-md p-6 sm:p-8">
 
         {{-- Logo / Title --}}
         <div class="text-center mb-8">

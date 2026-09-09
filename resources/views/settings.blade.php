@@ -63,7 +63,7 @@
                 <p class="text-gray-400 text-xs mt-1">Slug cannot be changed after registration.</p>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Currency *</label>
                     <select name="currency"
@@ -126,7 +126,7 @@
                 Subscription
             </h3>
 
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-gray-50 rounded-xl p-4">
                     <p class="text-xs text-gray-400 mb-1">Current Plan</p>
                     <p class="font-semibold text-gray-800">{{ $tenant->plan->name ?? '—' }}</p>

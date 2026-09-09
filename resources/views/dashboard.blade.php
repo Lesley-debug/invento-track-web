@@ -31,7 +31,7 @@
 </div>
 
 {{-- Action Cards --}}
-<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
     <div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center justify-between">
         <div>
             <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Pending Orders</p>
@@ -77,6 +77,7 @@
             <a href="{{ route('stock.add') }}" class="mt-3 inline-block text-indigo-600 text-sm font-medium hover:underline">+ Add stock</a>
         </div>
     @else
+        <div class="table-wrapper">
         <table class="w-full text-sm">
             <thead class="bg-gray-50 border-b border-gray-200">
                 <tr>
@@ -107,6 +108,7 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
     @endif
 </div>
 

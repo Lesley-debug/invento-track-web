@@ -17,8 +17,8 @@
 @endif
 
 {{-- Header --}}
-<div class="flex items-center justify-between mb-6">
-    <div class="flex items-center gap-3">
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 justify-between mb-6">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
         {{-- Search --}}
         <form method="GET" action="{{ route('products.index') }}">
             <div class="relative">
@@ -27,14 +27,14 @@
                 </svg>
                 <input type="text" name="search" value="{{ request('search') }}"
                     placeholder="Search products..."
-                    class="pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64">
+                    class="pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-64">
             </div>
         </form>
 
         {{-- Category filter --}}
         <form method="GET" action="{{ route('products.index') }}">
             <select name="category" onchange="this.form.submit()"
-                class="border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="">All Categories</option>
                 @foreach($categories as $category)
                 <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
@@ -48,7 +48,7 @@
     </div>
 
     <a href="{{ route('products.create') }}"
-        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-indigo-500/25 transition duration-200">
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-indigo-500/25 transition duration-200 whitespace-nowrap">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
@@ -77,6 +77,7 @@
 </div>
 @else
 <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+    <div class="table-wrapper">
     <table class="w-full text-sm">
         <thead class="bg-gray-50 border-b border-gray-200">
             <tr>
@@ -138,6 +139,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
     @if($products->hasPages())
     <div class="px-6 py-4 border-t border-gray-100">
         {{ $products->withQueryString()->links() }}

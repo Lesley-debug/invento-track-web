@@ -6,10 +6,10 @@
 
 @section('content')
 
-<div class="flex items-center justify-between mb-6">
+<div class="flex flex-col sm:flex-row sm:items-center gap-3 justify-between mb-6">
     <p class="text-gray-400 text-sm">{{ $movements->total() }} movements recorded</p>
     <a href="{{ route('stock.add') }}"
-        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-indigo-500/25">
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-lg shadow-indigo-500/25 whitespace-nowrap">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
@@ -23,6 +23,7 @@
 </div>
 @else
 <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+    <div class="table-wrapper">
     <table class="w-full text-sm">
         <thead class="bg-gray-50 border-b border-gray-200">
             <tr>
@@ -57,6 +58,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
 </div>
 @if($movements->hasPages())
 <div class="px-6 py-4 border-t border-gray-100">

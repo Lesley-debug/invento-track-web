@@ -309,7 +309,7 @@
             <div class="grid lg:grid-cols-2 gap-10 xl:gap-14 items-center">
 
                 {{-- Left: Video with copy --}}
-                <div class="relative min-h-[560px] lg:min-h-[620px] overflow-hidden rounded-3xl border border-white/15 shadow-2xl shadow-black/30">
+                <div class="relative min-h-[420px] sm:min-h-[500px] lg:min-h-[620px] overflow-hidden rounded-3xl border border-white/15 shadow-2xl shadow-black/30">
                     <video
                         autoplay
                         muted
@@ -335,14 +335,23 @@
                             as you do
                         </h1>
 
-                        <a href="#features"
-                            class="inline-flex items-center justify-center gap-2 bg-white/15 hover:bg-white/25 border border-white/35 text-white font-semibold px-6 py-3.5 rounded-2xl text-base transition backdrop-blur">
-                            <svg class="w-5 h-5 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            See how it works
-                        </a>
+                        <div class="flex flex-wrap gap-3">
+                            <a href="{{ route('register') }}"
+                                class="lg:hidden inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-6 py-3.5 rounded-2xl text-base transition shadow-lg shadow-indigo-500/40">
+                                Start free trial
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
+                            </a>
+                            <a href="#features"
+                                class="inline-flex items-center justify-center gap-2 bg-white/15 hover:bg-white/25 border border-white/35 text-white font-semibold px-6 py-3.5 rounded-2xl text-base transition backdrop-blur">
+                                <svg class="w-5 h-5 text-white/90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                See how it works
+                            </a>
+                        </div>
 
                         {{-- Trust signals --}}
                         <div class="flex items-center gap-4 sm:gap-5 flex-wrap mt-8">
@@ -356,6 +365,20 @@
                             @endforeach
                         </div>
                     </div>
+                </div>
+
+                {{-- Mobile: mini stats strip (shown only below lg) --}}
+                <div class="lg:hidden grid grid-cols-3 gap-3">
+                    @foreach([
+                        ['248', 'Products', 'indigo'],
+                        ['231', 'In Stock', 'emerald'],
+                        ['17', 'Low Stock', 'amber'],
+                    ] as $s)
+                    <div class="bg-white/10 border border-white/15 backdrop-blur rounded-2xl p-4 text-center">
+                        <p class="text-white font-black text-2xl">{{ $s[0] }}</p>
+                        <p class="text-white/60 text-xs mt-1">{{ $s[1] }}</p>
+                    </div>
+                    @endforeach
                 </div>
 
                 {{-- Right: Dashboard mockup --}}
