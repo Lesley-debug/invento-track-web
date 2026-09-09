@@ -1,2 +1,11 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /products
+Disallow: /stock
+Disallow: /invoices
+Disallow: /settings
+Disallow: /api/
+
+Sitemap: https://yourdomain.com/sitemap.xml

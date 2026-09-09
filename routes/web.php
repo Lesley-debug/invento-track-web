@@ -125,3 +125,145 @@ Route::middleware('auth')->group(function () {
     // Security settings
     Route::get('/settings/security', [App\Http\Controllers\SettingsController::class, 'security'])->name('settings.security');
     Route::put('/settings/security', [App\Http\Controllers\SettingsController::class, 'updatePassword'])->name('settings.password');
+
+
+// SEO landing pages
+Route::get('/for/{slug}', function ($slug) {
+    $pages = [
+        'pharmacies' => [
+            'title' => 'Pharmacy Inventory Management Software',
+            'hero' => 'Built for Pharmacies',
+            'subtitle' => 'Track medicine stock, manage expiry dates, issue prescriptions and invoices — all from one dashboard.',
+            'keywords' => 'pharmacy inventory management software Africa, medicine stock tracking, pharmacy software Nigeria Ghana Kenya Cameroon',
+            'features' => [
+                'Expiry date tracking for all medicines',
+                'Low stock alerts before you run out',
+                'Supplier purchase orders',
+                'Patient invoicing and payments',
+                'Multi-branch pharmacy support',
+                'Role-based staff access',
+            ],
+            'color' => 'emerald',
+            'emoji' => '💊',
+        ],
+        'supermarkets' => [
+            'title' => 'Supermarket Stock Management System',
+            'hero' => 'Built for Supermarkets',
+            'subtitle' => 'Manage thousands of products, track stock across multiple locations, and never run out of fast-moving items.',
+            'keywords' => 'supermarket inventory management software Africa, stock management system, retail inventory Nigeria Ghana Kenya',
+            'features' => [
+                'Manage thousands of products with ease',
+                'Multi-location stock tracking',
+                'Barcode and SKU management',
+                'Supplier purchase orders',
+                'Sales orders and invoicing',
+                'Low stock alerts',
+            ],
+            'color' => 'blue',
+            'emoji' => '🏪',
+        ],
+        'hospitals' => [
+            'title' => 'Hospital Inventory Management Software',
+            'hero' => 'Built for Hospitals',
+            'subtitle' => 'Track medical supplies, equipment, and medicines across all departments with complete audit trails.',
+            'keywords' => 'hospital inventory management software Africa, medical supply tracking, hospital stock system Nigeria Ghana Kenya Cameroon',
+            'features' => [
+                'Medical supply tracking by department',
+                'Equipment inventory management',
+                'Expiry date alerts for medicines',
+                'Full audit trail for compliance',
+                'Purchase orders from medical suppliers',
+                'Multi-department access control',
+            ],
+            'color' => 'red',
+            'emoji' => '🏥',
+        ],
+        'nigeria' => [
+            'title' => 'Inventory Management Software Nigeria',
+            'hero' => 'Built for Nigerian Businesses',
+            'subtitle' => 'Track stock, manage purchase orders and issue invoices in NGN. The inventory system built for Nigeria.',
+            'keywords' => 'inventory management software Nigeria, stock management system Nigeria, inventory software Lagos Abuja Kano',
+            'features' => [
+                'Nigerian Naira (NGN) support',
+                'Works across all Nigerian states',
+                'Mobile-friendly for field teams',
+                'Low internet mode support',
+                'Local supplier management',
+                'Multi-branch business support',
+            ],
+            'color' => 'green',
+            'emoji' => '🇳🇬',
+        ],
+        'ghana' => [
+            'title' => 'Inventory Management Software Ghana',
+            'hero' => 'Built for Ghanaian Businesses',
+            'subtitle' => 'Manage your stock, purchase orders and invoices in GHS. The inventory system built for Ghana.',
+            'keywords' => 'inventory management software Ghana, stock management system Ghana, inventory software Accra Kumasi',
+            'features' => [
+                'Ghanaian Cedi (GHS) support',
+                'Works across all Ghanaian regions',
+                'Mobile-friendly dashboard',
+                'Supplier and customer management',
+                'Purchase orders and invoicing',
+                'Free 14-day trial',
+            ],
+            'color' => 'yellow',
+            'emoji' => '🇬🇭',
+        ],
+        'kenya' => [
+            'title' => 'Inventory Management Software Kenya',
+            'hero' => 'Built for Kenyan Businesses',
+            'subtitle' => 'Track stock, manage M-Pesa payments and issue invoices in KES. The inventory system built for Kenya.',
+            'keywords' => 'inventory management software Kenya, stock management system Kenya, inventory software Nairobi Mombasa',
+            'features' => [
+                'Kenyan Shilling (KES) support',
+                'Mobile money payment tracking',
+                'Works across all Kenyan counties',
+                'Supplier and customer management',
+                'Purchase orders and invoicing',
+                'Free 14-day trial',
+            ],
+            'color' => 'red',
+            'emoji' => '🇰🇪',
+        ],
+        'cameroon' => [
+            'title' => 'Logiciel de Gestion de Stock Cameroun',
+            'hero' => 'Built for Cameroonian Businesses',
+            'subtitle' => 'Gérez votre stock, vos commandes et vos factures en XAF. Le système de gestion d\'inventaire fait pour le Cameroun.',
+            'keywords' => 'logiciel gestion stock Cameroun, inventory management software Cameroon, gestion inventaire Douala Yaounde Bamenda',
+            'features' => [
+                'Franc CFA (XAF) support',
+                'French and English interface',
+                'Works across all Cameroonian regions',
+                'Supplier management',
+                'Invoicing and payments',
+                'Free 14-day trial',
+            ],
+            'color' => 'indigo',
+            'emoji' => '🇨🇲',
+        ],
+        'retail' => [
+            'title' => 'Retail Inventory Management Software Africa',
+            'hero' => 'Built for Retail Shops',
+            'subtitle' => 'Manage your retail shop inventory, track sales, issue receipts and never run out of stock.',
+            'keywords' => 'retail inventory management software Africa, retail stock management, shop inventory system Nigeria Ghana Kenya',
+            'features' => [
+                'Product catalogue management',
+                'Sales tracking and reporting',
+                'Customer receipts and invoices',
+                'Low stock alerts',
+                'Supplier purchase orders',
+                'Multi-staff access',
+            ],
+            'color' => 'violet',
+            'emoji' => '🛒',
+        ],
+    ];
+
+    if (!isset($pages[$slug])) {
+        abort(404);
+    }
+
+    $page = $pages[$slug];
+    return view('seo.landing', compact('page', 'slug'));
+})->name('seo.landing');
