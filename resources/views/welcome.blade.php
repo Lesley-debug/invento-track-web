@@ -37,7 +37,7 @@
     {{-- JSON-LD Structured Data --}}
     <script type="application/ld+json">
         {
-            "@context": "https://schema.org",
+            "@@context": "https://schema.org",
             "@type": "SoftwareApplication",
             "name": "Invento Track",
             "applicationCategory": "BusinessApplication",
@@ -82,7 +82,7 @@
     {{-- FAQ Schema for rich snippets --}}
     <script type="application/ld+json">
         {
-            "@context": "https://schema.org",
+            "@@context": "https://schema.org",
             "@type": "FAQPage",
             "mainEntity": [{
                     "@type": "Question",
@@ -135,7 +135,159 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* ... rest of your styles ... */
+        .hero-video-fallback {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #0f0a28 100%);
+        }
+
+        .mesh-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .mesh-blob-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #c7d2fe, #a5b4fc);
+            top: -200px;
+            left: -100px;
+        }
+
+        .mesh-blob-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #ddd6fe, #c4b5fd);
+            top: 100px;
+            right: -150px;
+            animation-delay: -3s;
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            33% {
+                transform: translateY(-30px) scale(1.05);
+            }
+
+            66% {
+                transform: translateY(20px) scale(0.95);
+            }
+        }
+
+        .ticker-wrapper {
+            overflow: hidden;
+        }
+
+        .ticker-track {
+            display: flex;
+            width: max-content;
+            animation: ticker 20s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes ticker {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .dashboard-float {
+            animation: dashFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes dashFloat {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-1deg);
+            }
+
+            50% {
+                transform: translateY(-12px) rotate(-1deg);
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-card {
+            border: 1px solid #f3f4f6;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: #e0e7ff;
+            box-shadow: 0 20px 40px -12px rgba(79, 70, 229, 0.15);
+        }
+
+        .pricing-popular {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+
+        html {
+            max-width: 100vw;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+
+        .nav-scrolled {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 1px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        @media (max-width: 768px) {
+            .hero-video-fallback {
+                padding-top: 100px !important;
+            }
+
+            .mesh-blob {
+                display: none;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mesh-blob,
+            .dashboard-float,
+            .ticker-track,
+            .reveal {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
+        }
     </style>
 </head>
 
@@ -378,9 +530,13 @@
                                         <div class="bg-gray-800 rounded-xl p-3 border border-gray-700/50 mb-3">
                                             <p class="text-gray-400 text-xs font-medium mb-2">Stock Movements — Last 7 days</p>
                                             <div class="flex items-end gap-1 h-12">
-                                                @foreach([40, 65, 45, 80, 55, 90, 70] as $h)
-                                                <div class="flex-1 rounded-sm" style="height: {{ $h }}%; background: linear-gradient(to top, #4F46E5, #7C3AED); opacity: 0.8;"></div>
-                                                @endforeach
+                                                <div class="flex-1 h-[40%] rounded-sm" style="background: linear-gradient(to top, #4F46E5, #7C3AED); opacity: 0.8;"></div>
+                                                <div class="flex-1 h-[65%] rounded-sm" style="background: linear-gradient(to top, #4F46E5, #7C3AED); opacity: 0.8;"></div>
+                                                <div class="flex-1 h-[45%] rounded-sm" style="background: linear-gradient(to top, #4F46E5, #7C3AED); opacity: 0.8;"></div>
+                                                <div class="flex-1 h-[80%] rounded-sm" style="background: linear-gradient(to top, #4F46E5, #7C3AED); opacity: 0.8;"></div>
+                                                <div class="flex-1 h-[55%] rounded-sm" style="background: linear-gradient(to top, #4F46E5, #7C3AED); opacity: 0.8;"></div>
+                                                <div class="flex-1 h-[90%] rounded-sm" style="background: linear-gradient(to top, #4F46E5, #7C3AED); opacity: 0.8;"></div>
+                                                <div class="flex-1 h-[70%] rounded-sm" style="background: linear-gradient(to top, #4F46E5, #7C3AED); opacity: 0.8;"></div>
                                             </div>
                                         </div>
 
@@ -497,7 +653,7 @@
                                     <span class="text-xs font-bold text-{{ $product[3] }}-600">{{ $product[1] }} units</span>
                                 </div>
                                 <div class="w-full bg-gray-100 rounded-full h-2">
-                                    <div class="bg-{{ $product[3] }}-500 h-2 rounded-full transition-all" style="width: {{ $product[4] }}"></div>
+                                    <div class="bg-{{ $product[3] }}-500 h-2 rounded-full transition-all" style="width: {{ $product[4] }};"></div>
                                 </div>
                             </div>
                             @endforeach
@@ -779,7 +935,7 @@
                 @endforeach
             </div>
         </div>
-    </section>section>
+    </section>
 
     {{-- ===== CTA ===== --}}
     <section class="py-24 px-6 bg-gray-900 relative overflow-hidden">
